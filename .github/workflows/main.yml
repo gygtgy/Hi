@@ -1,0 +1,24 @@
+name: Build-iOS26-C
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build for iOS 26
+        run: |
+          SDK=$(xcrun --sdk iphoneos --show-sdk-path)
+          clang \
+            -target arm64-apple-ios26.0 \
+            -isysroot "$SDK" \
+            -arch arm64 \
+            src/*.c \
+            -o output_binary
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios26-build
+          path: output_binary
